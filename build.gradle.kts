@@ -13,6 +13,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.openrndr:openrndr-core:0.4.1")
+    implementation("org.openrndr:openrndr-application-jvm:0.4.1")
     testImplementation(kotlin("test"))
 }
 
