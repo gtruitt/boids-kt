@@ -5,9 +5,6 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 fun main() = application {
-    var boids: List<Boid> =
-        List(Config.NUM_BOIDS.value) { Boid.randomBoid() }
-
     configure {
         width = 1024
         height = 632
@@ -16,15 +13,14 @@ fun main() = application {
     }
 
     program {
+        var boids = List(Config.NUM_BOIDS.value) { Boid.randomBoid() }
+
         extend {
-            drawer.drawStyle.colorMatrix = tint(ColorRGBa.WHITE.shade(0.2))
             drawer.fill = ColorRGBa.PINK
-            drawer.circle(
-                cos(seconds) * width / 2.0 + width / 2.0,
-                sin(0.5 * seconds) * height / 2.0 + height / 2.0,
-                140.0
-            )
-            drawer.fill = ColorRGBa.WHITE
+
+            boids.forEach {
+                drawer.circle(it.x.toDouble(), it.y.toDouble(), Config.BOID_SIZE.value.toDouble())
+            }
         }
     }
 }
