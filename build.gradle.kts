@@ -86,6 +86,7 @@ val applicationLogging = Logging.FULL
 
 // ------------------------------------------------------------------------------------------------------------------ //
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     java
     alias(libs.plugins.kotlin.jvm)
@@ -137,7 +138,10 @@ tasks.withType<KotlinCompile> {
 
 // ------------------------------------------------------------------------------------------------------------------ //
 
-project.setProperty("mainClassName", applicationMainClass)
+application {
+    mainClass.set(applicationMainClass)
+}
+
 tasks {
     named<ShadowJar>("shadowJar") {
         manifest {

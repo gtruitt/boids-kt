@@ -1,4 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
 rootProject.name = "boids-kt"
 
 val openrndrUseSnapshot = false
