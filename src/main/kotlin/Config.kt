@@ -1,10 +1,5 @@
 enum class Config(val value: Int) {
-    FRAME_RATE(30),
-    BACKGROUND_SHADE(63),
     NUM_BOIDS(256),
-    BOID_SHADE(191),
-    BOID_STROKE_SHADE(0),
-    BOID_STROKE_WEIGHT(1),
     BOID_MIN_SPEED(4),
     BOID_MAX_SPEED(8),
     BOID_INERTIA(4),
@@ -13,5 +8,4 @@ enum class Config(val value: Int) {
     BOID_CROWDING_RADIUS(32),
     SCREEN_SIZE_X(1024),
     SCREEN_SIZE_Y(633),
-    SMOOTHING_LEVEL(1)
 }

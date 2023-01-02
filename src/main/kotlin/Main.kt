@@ -43,7 +43,7 @@ fun List<Double>.averageHeading() = atan2(sumOf { sin(it) }, sumOf { cos(it) })
 
 fun Boid.separationHeading(others: List<Boid>) = location.headingAwayFrom(others.centerOf())
 
-fun Boid.alignmentHeading(others: List<Boid>) = others.map { it.heading }.averageHeading()
+fun alignmentHeading(boids: List<Boid>) = boids.map { it.heading }.averageHeading()
 
 fun Boid.cohesionHeading(others: List<Boid>) = location.headingToward(others.centerOf())
 
@@ -57,23 +57,40 @@ fun Boid.findNewHeading(others: List<Boid>) =
         ).averageHeading()
     }
 
-/*
-(defn wrap-value
-  [value min-value max-value]
-  (cond (> value max-value) (- value max-value)
-        (< value min-value) (+ value max-value)
-        :else value))
+fun wrapToBounds(value: Double, floor: Int, ceiling: Int) =
+    when {
+        value > ceiling -> value - ceiling
+        value < 0 -> value + ceiling
+        else -> value
+    }
 
-(defn move-boid // "Boid.advance()"
-  [state boid]
-  (let [new-heading (boid-heading state boid)
-        new-x (+ (:x boid) (* (:speed boid) (quil/cos new-heading)))
-        new-y (+ (:y boid) (* (:speed boid) (quil/sin new-heading)))]
-    (merge boid
-           {:x (wrap-value new-x 0 (quil/width))
-            :y (wrap-value new-y 0 (quil/height))
-            :heading new-heading})))
-*/
+fun Boid.advance(others: List<Boid>, fieldSizeX: Int, fieldSizeY: Int) =
+    findNewHeading(others).let { newHeading ->
+        Boid(
+            Vector2(
+                wrapToBounds(
+                    location.x + (speed * cos(newHeading)),
+                    0,
+                    fieldSizeX
+                ),
+                wrapToBounds(
+                    location.y + (speed * sin(newHeading)),
+                    0,
+                    fieldSizeY
+                )
+            ),
+            newHeading,
+            speed,
+            id
+        )
+    }
+
+fun Drawer.configure() = also {
+    it.clear(ColorRGBa.PINK)
+    it.fill = ColorRGBa.WHITE
+    it.stroke = ColorRGBa.BLACK
+    it.strokeWeight = 1.0
+}
 
 fun List<Boid>.drawEach(drawer: Drawer) = forEach {
     drawer.circle(
@@ -86,17 +103,15 @@ fun List<Boid>.drawEach(drawer: Drawer) = forEach {
 fun main() = application {
     configure {
         width = 1024
-        height = 632
+        height = 633
         windowResizable = true
         title = "BoidsKt"
     }
-
     program {
-        drawer.fill = ColorRGBa.PINK
-
         var boids = List(Config.NUM_BOIDS.value) { Boid.randomBoid() }
-
         extend {
+            drawer.configure()
+            boids = boids.map { it.advance(boids, width, height) }
             boids.drawEach(drawer)
         }
     }
