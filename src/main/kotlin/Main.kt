@@ -49,12 +49,12 @@ fun Boid.cohesionHeading(others: List<Boid>) = location.headingToward(others.cen
 
 fun Boid.findNewHeading(otherBoids: List<Boid>) =
     otherBoids.visibleTo(this).let { visible ->
-        (Collections.nCopies(Config.BOID_INERTIA.value, heading) +
-         listOf(
-             separationHeading(visible.closeTo(this)),
-             alignmentHeading(visible),
-             cohesionHeading(visible),
-         )).averageHeading()
+        (listOf(
+            separationHeading(visible.closeTo(this)),
+            alignmentHeading(visible),
+            cohesionHeading(visible),
+        ) + Collections.nCopies(Config.BOID_INERTIA.value, heading)
+        ).averageHeading()
     }
 
 /*
