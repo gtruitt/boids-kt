@@ -8,7 +8,7 @@ enum class Config(val value: Int) {
     BOID_MIN_SPEED(4),
     BOID_MAX_SPEED(8),
     BOID_INERTIA(4),
-    BOID_SIZE(8),
+    BOID_SIZE(4),
     BOID_PERCEPTION_RADIUS(128),
     BOID_CROWDING_RADIUS(32),
     SCREEN_SIZE_X(1024),
