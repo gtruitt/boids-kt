@@ -47,12 +47,12 @@ fun Boid.alignmentHeading(others: List<Boid>) = others.map { it.heading }.averag
 
 fun Boid.cohesionHeading(others: List<Boid>) = location.headingToward(others.centerOf())
 
-fun Boid.findNewHeading(otherBoids: List<Boid>) =
-    otherBoids.visibleTo(this).let { visible ->
+fun Boid.findNewHeading(others: List<Boid>) =
+    others.visibleTo(this).let { neighbors ->
         (listOf(
-            separationHeading(visible.closeTo(this)),
-            alignmentHeading(visible),
-            cohesionHeading(visible),
+            separationHeading(neighbors.closeTo(this)),
+            alignmentHeading(neighbors),
+            cohesionHeading(neighbors),
         ) + Collections.nCopies(Config.BOID_INERTIA.value, heading)
         ).averageHeading()
     }
