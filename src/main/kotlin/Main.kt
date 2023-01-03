@@ -1,3 +1,4 @@
+import kotlinx.coroutines.*
 import org.openrndr.application
 import org.openrndr.color.ColorRGBa
 import org.openrndr.draw.Drawer
@@ -100,6 +101,11 @@ fun List<Boid>.drawEach(drawer: Drawer) = forEach {
     )
 }
 
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> =
+    coroutineScope {
+        map { async { f(it) } }.awaitAll()
+    }
+
 fun main() = application {
     configure {
         width = 1024
@@ -109,9 +115,14 @@ fun main() = application {
     }
     program {
         var boids = List(Config.NUM_BOIDS.value) { Boid.randomBoid() }
+
         extend {
             drawer.configure()
-            boids = boids.map { it.advance(boids, width, height) }
+
+            runBlocking(Dispatchers.Default) {
+                boids = boids.pmap { it.advance(boids, width, height) }
+            }
+
             boids.drawEach(drawer)
         }
     }
