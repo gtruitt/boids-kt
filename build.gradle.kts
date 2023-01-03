@@ -135,6 +135,7 @@ configure<JavaPluginConvention> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
+        // https://proandroiddev.com/kotlin-cleaning-java-bytecode-before-release-9567d4c63911
         freeCompilerArgs += listOf(
             "-Xno-call-assertions",
             "-Xno-receiver-assertions",
